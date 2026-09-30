@@ -1,9 +1,11 @@
-"""Create a small controlled Apify dataset for validating dataset mode in Cloud.
+"""Create and verify a small controlled Apify dataset for Cloud validation.
 
-Usage:
-    APIFY_TOKEN=... python scripts/create_test_dataset.py
+Usage (PowerShell):
+    $env:APIFY_TOKEN="..."
+    .\.venv\Scripts\python.exe scripts\create_test_dataset.py
 
-The script creates a uniquely named dataset and pushes six rows covering:
+The script creates an UNNAMED dataset on purpose. This avoids named-storage conflicts
+and is sufficient because the Actor accepts a dataset ID. The dataset contains six rows:
 - useful Markdown
 - useful HTML
 - exact duplicate
@@ -11,14 +13,20 @@ The script creates a uniquely named dataset and pushes six rows covering:
 - useful content without a URL
 - unusable row
 
-It prints only the dataset ID and basic metadata. It never prints the token.
+The script only prints success after it has:
+1. created the dataset;
+2. re-fetched it by ID;
+3. pushed all six rows;
+4. re-read the items by ID;
+5. verified that exactly six rows are readable.
+
+It never prints the API token.
 """
 
 from __future__ import annotations
 
 import asyncio
 import os
-from datetime import UTC, datetime
 
 from apify_client import ApifyClientAsync
 
@@ -85,6 +93,35 @@ ITEMS = [
 ]
 
 
+async def retry_get(dataset_client, attempts: int = 5, delay: float = 0.5):
+    """Re-fetch a just-created dataset, tolerating short control-plane propagation."""
+    last = None
+    for _ in range(attempts):
+        try:
+            last = await dataset_client.get()
+        except Exception:
+            last = None
+        if last is not None:
+            return last
+        await asyncio.sleep(delay)
+    return None
+
+
+async def retry_list_items(dataset_client, attempts: int = 5, delay: float = 0.5):
+    """Read items back, tolerating short metadata/data-plane propagation."""
+    last_error = None
+    for _ in range(attempts):
+        try:
+            result = await dataset_client.list_items(limit=20)
+            return result.items
+        except Exception as exc:
+            last_error = exc
+            await asyncio.sleep(delay)
+    if last_error is not None:
+        raise last_error
+    return []
+
+
 async def main() -> None:
     token = os.getenv("APIFY_TOKEN")
     if not token:
@@ -95,23 +132,41 @@ async def main() -> None:
 
     client = ApifyClientAsync(token=token)
 
-    suffix = datetime.now(UTC).strftime("%Y%m%d-%H%M%S")
-    name = f"rag-auditor-test-{suffix}"
+    # Intentionally unnamed: the Actor only needs the dataset ID and unnamed test
+    # storage avoids UI/name-collision issues. It can expire under normal Apify retention.
+    created = await client.datasets().get_or_create()
+    dataset_id = created.get("id")
+    if not dataset_id:
+        raise RuntimeError("Apify returned a dataset object without an ID.")
 
-    dataset = await client.datasets().get_or_create(name=name)
-    dataset_id = dataset["id"]
     dataset_client = client.dataset(dataset_id)
+
+    verified = await retry_get(dataset_client)
+    if verified is None:
+        raise RuntimeError(
+            "Apify returned a dataset ID, but the dataset could not be re-fetched by that ID. "
+            "Check that APIFY_TOKEN belongs to the same Apify account/workspace and has dataset "
+            "read/write permissions."
+        )
 
     await dataset_client.push_items(ITEMS)
 
-    info = await dataset_client.get()
-    item_count = info.get("itemCount") if info else None
+    readable_items = await retry_list_items(dataset_client)
+    if len(readable_items) != len(ITEMS):
+        raise RuntimeError(
+            f"Dataset verification failed: expected {len(ITEMS)} readable rows, "
+            f"got {len(readable_items)}."
+        )
 
-    print("Dataset created successfully.")
-    print(f"Dataset name: {name}")
+    # Final metadata check is informative only; list_items above is the source of truth.
+    final_info = await retry_get(dataset_client)
+    reported_count = final_info.get("itemCount") if final_info else None
+
+    print("Dataset created and verified successfully.")
     print(f"Dataset ID: {dataset_id}")
-    print(f"Items pushed: {len(ITEMS)}")
-    print(f"Reported item count: {item_count}")
+    print(f"Readable items: {len(readable_items)}")
+    print(f"Reported item count: {reported_count}")
+    print("Expected test rows: 6")
 
 
 if __name__ == "__main__":
