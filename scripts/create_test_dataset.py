@@ -53,10 +53,11 @@ NEAR_GUIDE = (
     "test request before deploying the service. In production, separate development and "
     "production settings, rotate secrets regularly, record deployment changes, and monitor "
     "failed requests. The deployment checklist should verify dependency versions, network "
-    "access, logging, health checks, rollback procedures, alerting, and a final smoke test. "
-    "When troubleshooting, start with configuration values and connectivity, then inspect "
-    "application logs and recent deployment changes. Keep the procedure documented so another "
-    "engineer can repeat the same installation and validation steps consistently."
+    "access, logging, health checks, rollback procedures, and alerting. When troubleshooting, "
+    "start with configuration values and connectivity, then inspect application logs and the "
+    "most recent deployment changes. Keep the procedure documented so another engineer can "
+    "repeat the same installation and validation steps consistently. Run one final smoke test "
+    "after deployment."
 )
 
 ITEMS = [
