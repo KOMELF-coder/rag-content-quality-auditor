@@ -76,7 +76,7 @@ Website mode visits only the exact starting hostname. It follows bounded sitemap
 }
 ```
 
-Use a dataset accessible to your Apify account. This mode analyzes existing content without recrawling its URLs. Text-only records are supported even when their source URL is missing; use `source_id` to find the original zero-based row.
+Use the **Source dataset** picker in Apify Console to grant this limited-permissions Actor read-only access to the dataset you want to audit. API callers can still pass the dataset ID or unique name directly. This mode analyzes existing content without recrawling its URLs. Text-only records are supported even when their source URL is missing; use `source_id` to find the original zero-based row.
 
 ## 7. Example output: interpreting a recommendation
 
@@ -138,7 +138,7 @@ Levels: **excellent ≥85**, **good ≥70**, **mixed ≥50**, **poor <50**.
 | --- | --- | --- |
 | `mode` | `website` | `website` or `dataset` |
 | `start_url` | Python tutorial | Public HTTP(S); required in website mode; no credentials, ports 80/443 only |
-| `dataset_id` | empty | Required in dataset mode; ID or owner~dataset name |
+| `dataset_id` | empty | Required in dataset mode; Console uses an Apify dataset picker with read-only access; API callers may pass an ID or unique name |
 | `max_pages` | 50 | 1–1,000 page attempts or source rows, including failures; form suggests 8 |
 | `max_depth` | 3 | 0–10; form suggests 1; start=0, sitemap pages=1; 0 disables sitemap discovery |
 | `include_patterns` | `[]` | Full normalized URL globs; form suggests `https://docs.python.org/3/tutorial/*`; empty includes all eligible same-host URLs |
