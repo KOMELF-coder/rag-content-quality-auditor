@@ -31,15 +31,38 @@ import os
 from apify_client import ApifyClientAsync
 
 
+BASE_GUIDE = (
+    "# Installation guide\n\n"
+    "Install the product with pip and create a dedicated virtual environment before adding "
+    "application dependencies. Configure the API key through an environment variable rather "
+    "than committing credentials to source control. Validate the configuration with a small "
+    "test request before deploying the service. In production, separate development and "
+    "production settings, rotate secrets regularly, record deployment changes, and monitor "
+    "failed requests. The deployment checklist should verify dependency versions, network "
+    "access, logging, health checks, rollback procedures, and alerting. When troubleshooting, "
+    "start with configuration values and connectivity, then inspect application logs and the "
+    "most recent deployment changes. Keep the procedure documented so another engineer can "
+    "repeat the same installation and validation steps consistently."
+)
+
+NEAR_GUIDE = (
+    "# Installation guide\n\n"
+    "Install the product with pip and create a dedicated virtual environment before adding "
+    "application dependencies. Configure the API key through an environment variable rather "
+    "than committing credentials to source control. Validate the configuration with a small "
+    "test request before deploying the service. In production, separate development and "
+    "production settings, rotate secrets regularly, record deployment changes, and monitor "
+    "failed requests. The deployment checklist should verify dependency versions, network "
+    "access, logging, health checks, rollback procedures, alerting, and a final smoke test. "
+    "When troubleshooting, start with configuration values and connectivity, then inspect "
+    "application logs and recent deployment changes. Keep the procedure documented so another "
+    "engineer can repeat the same installation and validation steps consistently."
+)
+
 ITEMS = [
     {
         "url": "https://example.com/docs/guide",
-        "markdown": (
-            "# Installation guide\n\n"
-            "Install the product with pip. Then configure the API key in your environment. "
-            "This guide explains setup, configuration, validation, and troubleshooting "
-            "for a production deployment."
-        ),
+        "markdown": BASE_GUIDE,
     },
     {
         "url": "https://example.com/docs/security",
@@ -63,21 +86,11 @@ ITEMS = [
     },
     {
         "url": "https://example.com/docs/guide-copy",
-        "markdown": (
-            "# Installation guide\n\n"
-            "Install the product with pip. Then configure the API key in your environment. "
-            "This guide explains setup, configuration, validation, and troubleshooting "
-            "for a production deployment."
-        ),
+        "markdown": BASE_GUIDE,
     },
     {
         "url": "https://example.com/docs/guide-v2",
-        "markdown": (
-            "# Installation guide\n\n"
-            "Install the product with pip. Then configure the API key in your environment. "
-            "This updated guide explains setup, configuration, validation, troubleshooting, "
-            "and deployment checks for production environments."
-        ),
+        "markdown": NEAR_GUIDE,
     },
     {
         "markdown": (
