@@ -1,4 +1,4 @@
-# Benchmark plan — pricing remains undecided
+# Benchmark plan and measured launch baseline
 
 ## Matrix
 
@@ -33,9 +33,26 @@ and cold starts. Do not extrapolate the small Windows live check into Cloud cost
 6. Calculate cost per successful audited document, including auxiliary requests, startup,
    storage, diagnostics and failures. Include the cost of entirely unsuccessful runs.
 
-## Pricing decision inputs
+## Measured launch baseline — 2026-09-30
 
-Need measured cost distributions, support overhead, Store/platform fees, expected volume,
-memory choice and acceptable margin. Source pagination uses batches of at most 50 rows;
-measure API overhead and peak batch memory before increasing that size. Set a `page-audited` price only
-after reviewing these data. No price or performance improvement is inferred here.
+Apify Cloud website-mode validation used public Python documentation, 512 MB memory,
+concurrency 4 and the same build/configuration family. Observed runs:
+
+| Selected | Successful | Skipped | Engine runtime | Run cost |
+| ---: | ---: | ---: | ---: | ---: |
+| 10 | 10 | 0 | 2.485 s | UI displayed $0.000 |
+| 50 | 43 | 7 | 46.559 s | $0.001 |
+| 100 | 92 | 8 | 112.513 s | $0.003 |
+| 500 | 491 | 9 | 1005.311 s | $0.031 |
+
+The 500-page run had 504 HTTP requests, 0 page-processing failures and 2,660,671
+estimated analyzed tokens. A prior 500-page attempt hit the 300-second run timeout after
+189 results; the clean run completed with a 1,200-second timeout.
+
+These measurements are not universal guarantees. They justify the initial commercial
+decision to launch at **$0.003 per successful `page-audited` event**, with platform usage
+intended to be included. At that event price, 1,000 successful audits cost about $3 to
+the user before any unrelated storage charges.
+
+Future benchmarking should broaden targets (blogs, SaaS, ecommerce), repeat runs, capture
+peak memory and verify the live PPE ledger/budget behavior after monetization is enabled.
