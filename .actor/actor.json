@@ -2,7 +2,7 @@
   "actorSpecification": 1,
   "name": "rag-content-quality-auditor",
   "title": "RAG Content Quality Auditor",
-  "description": "Audit website content or crawler datasets before RAG ingestion. Explainable quality scores, duplicates, token estimates and include/exclude recommendations.",
+  "description": "Audit websites or Apify datasets before RAG/LLM ingestion. Score content quality, find duplicates and low-value pages, estimate tokens, and identify what to keep for AI knowledge bases and vector databases.",
   "version": "1.0",
   "buildTag": "latest",
   "dockerfile": "../Dockerfile",
