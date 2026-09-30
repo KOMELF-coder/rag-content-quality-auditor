@@ -442,6 +442,7 @@
       "title": "RAG readiness",
       "transformation": {
         "fields": [
+          "source_id",
           "url",
           "rag_readiness_score",
           "rag_value",
@@ -455,9 +456,13 @@
       "display": {
         "component": "table",
         "properties": {
+          "source_id": {
+            "label": "Source",
+            "format": "text"
+          },
           "url": {
             "label": "URL",
-            "format": "link"
+            "format": "text"
           },
           "rag_readiness_score": {
             "label": "RAG score",
