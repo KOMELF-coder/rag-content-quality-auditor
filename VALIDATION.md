@@ -22,8 +22,20 @@ Environment: Windows, Python 3.12.14, Apify SDK 3.4.1, HTTPX 0.28.1.
   input, dataset and output meta-schemas, in addition to local JSON Schema checks.
 - **Docker build not executed in this environment.** No Docker executable/installation
   was found. CI includes a Linux Docker build but its result must be checked separately.
-- **Apify Cloud validation not executed.** No Cloud run, published Store listing,
-  real customer charge, platform cost or Cloud memory measurement is claimed.
+- **Apify Cloud validation executed on 2026-09-30.** The linked GitHub build succeeded
+  and both website and existing-dataset modes completed under LIMITED_PERMISSIONS.
+  Controlled dataset mode verified read-only dataset access, five successful analyses,
+  one unusable-row skip, exact-duplicate detection and stable source IDs.
+- Website Cloud benchmarks used 512 MB memory and concurrency 4 on public Python docs:
+  10 selected / 10 successful (~7 s UI, displayed $0.000);
+  50 / 43 (~1 min UI, $0.001);
+  100 / 92 (1m56s UI, $0.003);
+  500 / 491 (16m51s UI, $0.031). The 500-page run processed all 500 selected URLs,
+  skipped 9, and reported 0 page-processing failures. These are single-target validation
+  measurements, not general performance guarantees.
+- A 500-page run with the previous 300-second run timeout timed out after producing
+  189 rows; rerunning with a 1,200-second timeout completed successfully. V1 does not
+  resume partial runs.
 
 The initial V1 test count and self-review record are in [REVIEW.md](REVIEW.md).
 Generated local run files live under ignored `validation-output/`; synthetic public
@@ -124,25 +136,18 @@ sections. Only the Python documentation scenario has been run here. Inspect robo
 extraction, request count, retained content and diagnostic reasons before increasing size.
 Keep local output ignored; never commit source credentials or private content.
 
-## Apify Cloud validation still required
+## Remaining pre-publication validation
 
-1. Connect the GitHub repository, build using `.actor/actor.json`, and select a modest
-   memory allocation (start at 512 MB; measure before reducing it).
-2. Check the Store/Console input form: website/dataset modes, eight-page prefill,
-   advanced settings, required dataset ID runtime error and valid limits.
-3. Run the suggested website input. Inspect live rows, report/diagnostic links and logs.
-4. Create/read a controlled source dataset containing text, Markdown, HTML, duplicates,
-   a missing URL, an unusable row and an empty dataset. Verify dataset access permissions
-   and exact source-row identities. Also try an inaccessible dataset ID.
-5. Configure only custom `page-audited` PPE events after pricing review. Use platform
-   testing facilities to verify analyzed/failed/skipped counts, event ledger and a budget
-   allowing exactly one result. Do not substitute a local simulated charge for this check.
-6. Interrupt a run after publication; verify partial data remains and restart fails clearly
-   instead of republishing old results. Test platform timeout/migration behavior.
-7. Compare dataset count, DIAGNOSTICS length, report totals and actual billing ledger.
-8. Record run/build IDs, runtime, peak memory and platform cost. Verify low-budget stopping
-   does not silently omit rows that the report says were published.
-9. Check GitHub Actions and Docker results before considering a public Store release.
+1. Configure PPE with only the custom `page-audited` event at the launch price and include
+   platform usage in the event price. Verify the live pricing screen before publication.
+2. Use Apify's charging/budget controls to verify a budget that permits exactly one result,
+   and reconcile the platform event ledger against `billable_result_count`.
+3. Try an explicitly inaccessible dataset ID and confirm the permission error is clear.
+4. After publication, interrupt a run and verify partial data remains; start a fresh run
+   rather than resurrecting because V1 has no resume contract.
+5. Record peak memory from platform metrics if available; current validation used 512 MB
+   successfully but did not capture a formal peak-RSS figure.
+6. Check GitHub Actions/Docker CI status and Actor quality checks before Store release.
 
 ## Benchmarks and known limits
 
