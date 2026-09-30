@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "mode": "dataset",
+  "source": "synthetic-example",
+  "domain": null,
+  "source_dataset": "synthetic-example",
+  "started_at": "2026-09-30T00:00:00+00:00",
+  "finished_at": "2026-09-30T00:00:00+00:00",
+  "pages_discovered": 3,
+  "pages_selected": 3,
+  "pages_processed": 3,
+  "pages_successfully_audited": 3,
+  "pages_failed": 0,
+  "pages_skipped": 0,
+  "recommended_pages": 1,
+  "low_value_pages": 2,
+  "unique_pages": 2,
+  "exact_duplicates": 1,
+  "near_duplicates": 0,
+  "duplicates_not_checked": 0,
+  "likely_js_pages": 1,
+  "estimated_corpus_tokens": 239,
+  "estimated_analyzed_tokens": 481,
+  "overall_score": 62.23,
+  "score_breakdown": {
+    "content": 12.98,
+    "structure": 11.25,
+    "cleanliness": 10.0,
+    "uniqueness": 15.0,
+    "metadata": 7.0,
+    "accessibility": 6.0
+  },
+  "score_denominator": 2,
+  "score_aggregation_method": "Unweighted mean of audited unique/not-checked pages, excluding navigation_or_index; null if none.",
+  "average_analyzed_score": 66.97,
+  "median_analyzed_score": 76.46,
+  "top_issues": [
+    {
+      "issue": "Exact duplicate of another document.",
+      "count": 1
+    },
+    {
+      "issue": "Very little server-rendered text; page likely requires JavaScript.",
+      "count": 1
+    }
+  ],
+  "recommended_include_patterns": [],
+  "recommended_exclude_patterns": [],
+  "warnings": [],
+  "request_count": 0,
+  "runtime_seconds": 0,
+  "ai_metadata": {},
+  "billable_result_count": 3,
+  "coverage": "Bounded audit of observed eligible URLs/rows; not exhaustive.",
+  "example_kind": "Illustrative synthetic fixtures; not a live benchmark."
+}

@@ -1,0 +1,494 @@
+{
+  "actorSpecification": 1,
+  "fields": {
+    "type": "object",
+    "properties": {
+      "source_type": {
+        "type": "string",
+        "title": "Source type",
+        "description": "Source type.",
+        "enum": [
+          "website",
+          "dataset"
+        ]
+      },
+      "source_id": {
+        "type": "string",
+        "title": "Source id",
+        "description": "Stable source reference: requested URL or dataset:ID:zero-based-row-index."
+      },
+      "url": {
+        "type": "string",
+        "title": "Url",
+        "description": "Normalized final or supplied source URL; empty when dataset URL is unavailable."
+      },
+      "requested_url": {
+        "type": "string",
+        "title": "Requested url",
+        "description": "Requested url."
+      },
+      "final_url": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Final url",
+        "description": "Final url."
+      },
+      "canonical_url": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Canonical url",
+        "description": "Canonical url."
+      },
+      "status": {
+        "type": "string",
+        "title": "Status",
+        "description": "audited for successful analyses; skipped/failed diagnostics are saved separately.",
+        "enum": [
+          "audited",
+          "skipped",
+          "failed"
+        ]
+      },
+      "error_code": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Error code",
+        "description": "Error code."
+      },
+      "http_status": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Http status",
+        "description": "Http status."
+      },
+      "content_status": {
+        "type": "string",
+        "title": "Content status",
+        "description": "Content status.",
+        "enum": [
+          "ok",
+          "empty",
+          "too_short",
+          "likely_requires_javascript",
+          "unsupported",
+          "unavailable"
+        ]
+      },
+      "title": {
+        "type": "string",
+        "title": "Title",
+        "description": "Title."
+      },
+      "page_profile": {
+        "type": "string",
+        "title": "Page profile",
+        "description": "Page profile."
+      },
+      "rag_readiness_score": {
+        "type": "number",
+        "title": "Rag readiness score",
+        "description": "Sum of six documented components, 0 to 100; not measured retrieval accuracy.",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "rag_readiness_level": {
+        "type": "string",
+        "title": "Rag readiness level",
+        "description": "Rag readiness level.",
+        "enum": [
+          "excellent",
+          "good",
+          "mixed",
+          "poor"
+        ]
+      },
+      "rag_value": {
+        "type": "string",
+        "title": "Rag value",
+        "description": "Deterministic retrieval-potential proxy, not semantic business relevance.",
+        "enum": [
+          "high",
+          "medium",
+          "low"
+        ]
+      },
+      "recommended_for_rag": {
+        "type": "boolean",
+        "title": "Recommended for rag",
+        "description": "True when the explicit quality, content, uniqueness and profile criteria pass."
+      },
+      "estimated_tokens": {
+        "type": "integer",
+        "title": "Estimated tokens",
+        "description": "Approximate Unicode characters divided by four, rounded up."
+      },
+      "token_estimation_method": {
+        "type": "string",
+        "title": "Token estimation method",
+        "description": "Token estimation method."
+      },
+      "raw_html_chars": {
+        "type": "integer",
+        "title": "Raw html chars",
+        "description": "Raw html chars."
+      },
+      "raw_text_chars": {
+        "type": "integer",
+        "title": "Raw text chars",
+        "description": "Raw text chars."
+      },
+      "main_content_chars": {
+        "type": "integer",
+        "title": "Main content chars",
+        "description": "Main content chars."
+      },
+      "word_count": {
+        "type": "integer",
+        "title": "Word count",
+        "description": "Word count."
+      },
+      "boilerplate_ratio": {
+        "type": "number",
+        "title": "Boilerplate ratio",
+        "description": "Clamped 1 - main_content_chars / max(raw_text_chars, 1)."
+      },
+      "heading_count": {
+        "type": "integer",
+        "title": "Heading count",
+        "description": "Heading count."
+      },
+      "h1_count": {
+        "type": "integer",
+        "title": "H1 count",
+        "description": "H1 count."
+      },
+      "h2_count": {
+        "type": "integer",
+        "title": "H2 count",
+        "description": "H2 count."
+      },
+      "h3_count": {
+        "type": "integer",
+        "title": "H3 count",
+        "description": "H3 count."
+      },
+      "heading_hierarchy_anomalies": {
+        "type": "integer",
+        "title": "Heading hierarchy anomalies",
+        "description": "Heading hierarchy anomalies."
+      },
+      "paragraph_count": {
+        "type": "integer",
+        "title": "Paragraph count",
+        "description": "Paragraph count."
+      },
+      "list_count": {
+        "type": "integer",
+        "title": "List count",
+        "description": "List count."
+      },
+      "table_count": {
+        "type": "integer",
+        "title": "Table count",
+        "description": "Table count."
+      },
+      "code_block_count": {
+        "type": "integer",
+        "title": "Code block count",
+        "description": "Code block count."
+      },
+      "internal_link_count": {
+        "type": "integer",
+        "title": "Internal link count",
+        "description": "Internal link count."
+      },
+      "external_link_count": {
+        "type": "integer",
+        "title": "External link count",
+        "description": "External link count."
+      },
+      "duplicate_status": {
+        "type": "string",
+        "title": "Duplicate status",
+        "description": "Duplicate status.",
+        "enum": [
+          "unique",
+          "exact_duplicate",
+          "near_duplicate",
+          "not_checked"
+        ]
+      },
+      "duplicate_of": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Duplicate of",
+        "description": "Representative source_id within this audit, or null."
+      },
+      "similarity": {
+        "anyOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Similarity",
+        "description": "One minus 64-bit SimHash Hamming distance divided by 64; exact matches are 1."
+      },
+      "duplicate_match": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Duplicate match",
+        "description": "Duplicate match."
+      },
+      "has_canonical": {
+        "type": "boolean",
+        "title": "Has canonical",
+        "description": "Has canonical."
+      },
+      "has_json_ld": {
+        "type": "boolean",
+        "title": "Has json ld",
+        "description": "Has json ld."
+      },
+      "has_meta_description": {
+        "type": "boolean",
+        "title": "Has meta description",
+        "description": "Has meta description."
+      },
+      "metadata_available": {
+        "type": "boolean",
+        "title": "Metadata available",
+        "description": "Whether HTML metadata could be inspected; missing HTML is reported explicitly."
+      },
+      "robots_checked": {
+        "type": "boolean",
+        "title": "Robots checked",
+        "description": "Robots checked."
+      },
+      "robots_allowed": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Robots allowed",
+        "description": "Observed/fallback crawl decision; null if not checked. Not a legal consent signal."
+      },
+      "robots_url": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Robots url",
+        "description": "Robots url."
+      },
+      "recommended_chunk_size": {
+        "type": "integer",
+        "title": "Recommended chunk size",
+        "description": "Starting chunk size in estimated tokens; evaluate with your retrieval pipeline."
+      },
+      "recommended_chunk_overlap": {
+        "type": "integer",
+        "title": "Recommended chunk overlap",
+        "description": "Recommended chunk overlap."
+      },
+      "chunking_reason": {
+        "type": "string",
+        "title": "Chunking reason",
+        "description": "Chunking reason."
+      },
+      "score_breakdown": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "number"
+        },
+        "title": "Score breakdown",
+        "description": "Score breakdown."
+      },
+      "reasons": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "title": "Reasons",
+        "description": "Reasons."
+      },
+      "issues": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "title": "Issues",
+        "description": "Issues."
+      },
+      "recommendations": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "title": "Recommendations",
+        "description": "Recommendations."
+      },
+      "collected_at": {
+        "type": "string",
+        "title": "Collected at",
+        "description": "Collected at."
+      }
+    },
+    "required": [
+      "source_type",
+      "source_id",
+      "url",
+      "requested_url",
+      "final_url",
+      "canonical_url",
+      "status",
+      "error_code",
+      "http_status",
+      "content_status",
+      "title",
+      "page_profile",
+      "rag_readiness_score",
+      "rag_readiness_level",
+      "rag_value",
+      "recommended_for_rag",
+      "estimated_tokens",
+      "token_estimation_method",
+      "raw_html_chars",
+      "raw_text_chars",
+      "main_content_chars",
+      "word_count",
+      "boilerplate_ratio",
+      "heading_count",
+      "h1_count",
+      "h2_count",
+      "h3_count",
+      "heading_hierarchy_anomalies",
+      "paragraph_count",
+      "list_count",
+      "table_count",
+      "code_block_count",
+      "internal_link_count",
+      "external_link_count",
+      "duplicate_status",
+      "duplicate_of",
+      "similarity",
+      "duplicate_match",
+      "has_canonical",
+      "has_json_ld",
+      "has_meta_description",
+      "metadata_available",
+      "robots_checked",
+      "robots_allowed",
+      "robots_url",
+      "recommended_chunk_size",
+      "recommended_chunk_overlap",
+      "chunking_reason",
+      "score_breakdown",
+      "reasons",
+      "issues",
+      "recommendations",
+      "collected_at"
+    ],
+    "additionalProperties": false
+  },
+  "views": {
+    "overview": {
+      "title": "RAG readiness",
+      "transformation": {
+        "fields": [
+          "url",
+          "rag_readiness_score",
+          "rag_value",
+          "recommended_for_rag",
+          "estimated_tokens",
+          "duplicate_status",
+          "content_status",
+          "issues"
+        ]
+      },
+      "display": {
+        "component": "table",
+        "properties": {
+          "url": {
+            "label": "URL",
+            "format": "link"
+          },
+          "rag_readiness_score": {
+            "label": "RAG score",
+            "format": "number"
+          },
+          "rag_value": {
+            "label": "RAG value",
+            "format": "text"
+          },
+          "recommended_for_rag": {
+            "label": "Recommended",
+            "format": "boolean"
+          },
+          "estimated_tokens": {
+            "label": "Est. tokens",
+            "format": "number"
+          },
+          "duplicate_status": {
+            "label": "Duplicates",
+            "format": "text"
+          },
+          "content_status": {
+            "label": "Content status",
+            "format": "text"
+          },
+          "issues": {
+            "label": "Issues",
+            "format": "array"
+          }
+        }
+      }
+    }
+  }
+}

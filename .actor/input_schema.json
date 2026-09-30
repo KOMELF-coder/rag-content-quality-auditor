@@ -1,0 +1,21 @@
+{
+  "title": "RAG Content Quality Auditor",
+  "description": "Choose a website or an existing dataset. Get explainable recommendations before RAG ingestion.",
+  "type": "object",
+  "schemaVersion": 1,
+  "additionalProperties": false,
+  "properties": {
+    "mode": {"title": "Source", "type": "string", "description": "Audit accessible website pages or content already stored in an Apify dataset.", "editor": "select", "enum": ["website", "dataset"], "enumTitles": ["Website", "Existing dataset"], "default": "website"},
+    "start_url": {"title": "Website URL", "type": "string", "description": "Public HTTP(S) starting page. Only this hostname is visited. Ignored in dataset mode.", "editor": "textfield", "default": "https://docs.python.org/3/tutorial/", "prefill": "https://docs.python.org/3/tutorial/"},
+    "max_pages": {"title": "Maximum pages", "type": "integer", "description": "Maximum page attempts or source dataset rows, including failures and skipped content.", "default": 50, "prefill": 8, "minimum": 1, "maximum": 1000},
+    "dataset_id": {"title": "Source dataset ID", "type": "string", "description": "Required for Existing dataset mode. Enter an ID or owner~dataset name that your Apify account can read.", "editor": "textfield", "default": ""},
+    "max_depth": {"sectionCaption": "Advanced options", "sectionDescription": "The defaults suit a small first audit.", "title": "Link depth", "type": "integer", "description": "Start page is depth 0. Sitemap pages are depth 1. Set 0 to audit only the starting page.", "default": 3, "minimum": 0, "maximum": 10},
+    "include_patterns": {"title": "Include URL patterns", "type": "array", "description": "Optional full-URL globs, e.g. https://example.com/docs/*. An empty list includes all eligible URLs.", "editor": "stringList", "items": {"type": "string", "minLength": 1, "maxLength": 200}, "maxItems": 20, "default": []},
+    "exclude_patterns": {"title": "Exclude URL patterns", "type": "array", "description": "Full-URL globs to skip. Exclusions take precedence, including for redirects.", "editor": "stringList", "items": {"type": "string", "minLength": 1, "maxLength": 200}, "maxItems": 20, "default": []},
+    "respect_robots_txt": {"title": "Respect robots.txt", "type": "boolean", "description": "Check observed crawl rules before fetching pages. Unavailable rules are reported; server/network errors cause conservative skipping.", "default": true},
+    "detect_duplicates": {"title": "Detect duplicates", "type": "boolean", "description": "Compare extracted main content within this run before scoring pages.", "default": true},
+    "check_ai_metadata": {"title": "Check llms.txt files", "type": "boolean", "description": "Observe /llms.txt and /llms-full.txt once. Their absence does not affect scores. Website mode only.", "default": true},
+    "max_concurrency": {"title": "Concurrent page requests", "type": "integer", "description": "Maximum simultaneous page fetches. Lower values reduce load on the source website.", "default": 4, "minimum": 1, "maximum": 8},
+    "request_timeout_secs": {"title": "Request timeout (seconds)", "type": "integer", "description": "Deadline for one HTTP attempt including body transfer. Retries and redirects are separately bounded.", "default": 25, "minimum": 5, "maximum": 60}
+  }
+}

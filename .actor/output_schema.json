@@ -1,0 +1,10 @@
+{
+  "actorOutputSchemaVersion": 1,
+  "title": "RAG audit results",
+  "type": "object",
+  "properties": {
+    "results": {"type": "string", "title": "Page analyses", "description": "One explainable result per successfully analyzed document.", "template": "{{links.apiDefaultDatasetUrl}}/items?view=overview"},
+    "audit_report": {"type": "string", "title": "Global audit report", "description": "Reconciled totals, corpus token estimate and overall quality signals.", "template": "{{links.apiDefaultKeyValueStoreUrl}}/records/AUDIT_REPORT"},
+    "diagnostics": {"type": "string", "title": "Skipped and failed resources", "description": "Unbilled page diagnostics, separate from successful analyses.", "template": "{{links.apiDefaultKeyValueStoreUrl}}/records/DIAGNOSTICS"}
+  }
+}

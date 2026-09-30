@@ -1,0 +1,7 @@
+{
+  "mode": "website",
+  "start_url": "https://docs.python.org/3/tutorial/",
+  "max_pages": 8,
+  "max_depth": 1,
+  "include_patterns": ["https://docs.python.org/3/tutorial/*"]
+}
