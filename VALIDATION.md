@@ -25,9 +25,29 @@ Environment: Windows, Python 3.12.14, Apify SDK 3.4.1, HTTPX 0.28.1.
 - **Apify Cloud validation not executed.** No Cloud run, published Store listing,
   real customer charge, platform cost or Cloud memory measurement is claimed.
 
-The final offline test count and self-review record are in [REVIEW.md](REVIEW.md).
+The initial V1 test count and self-review record are in [REVIEW.md](REVIEW.md).
 Generated local run files live under ignored `validation-output/`; synthetic public
 examples are committed under `examples/` and are not live performance evidence.
+
+## Dataset pagination update — 2026-09-30
+
+Source rows are fetched sequentially in batches of at most 50, requesting
+`min(50, max_pages - offset)` items. The generator retains one response batch, releases
+it before fetching the next, and performs no prefetch. Pagination retains at most 50
+selected source rows alongside the current analysis; individual sizes still matter for Cloud sizing.
+Offsets advance by the actual number of returned rows; an empty response ends iteration.
+This also handles server responses shorter than requested without skipping indexes.
+
+An unchanged dataset with at least 1,000 rows now needs 20 list-items calls to process
+1,000 rows. A dataset ending before the page limit can require one final empty request.
+Original zero-based source IDs, ordering, content precedence and billing rules are preserved.
+Pagination tests cover small/multiple/partial batches, page-limit cuts, empty datasets,
+source IDs, mixed usable/unusable rows, short server responses and early consumer stop.
+The full suite completed with `192 passed, 1 warning in 1.19s`; the warning is the existing
+Apify SDK transitive-dependency deprecation. `compileall` for my_actor/scripts/tests,
+`ruff check`, `ruff format --check` (38 files), local schema validation and validation
+against all four previously downloaded official Apify meta-schemas passed.
+Docker and Apify Cloud were not run for this change.
 
 ## Offline quality gate
 
@@ -130,5 +150,5 @@ Follow [BENCHMARK_PLAN.md](BENCHMARK_PLAN.md); no final price has been selected.
 supported input and pathological document sizes need Cloud memory/runtime measurement.
 Core limitations: no rendering/auth/PDF extraction; exact-host crawling; heuristic lexical
 deduplication/quality signals; approximate tokens; no semantic relevance test; no resumable
-partial runs; one-row dataset pagination can add API overhead. Standard robots allow/disallow
+partial runs; batches of up to 50 source rows require Cloud memory sizing. Standard robots allow/disallow
 rules are enforced; Crawl-delay/Request-rate scheduling is not implemented in V1.

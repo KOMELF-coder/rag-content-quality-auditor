@@ -36,6 +36,6 @@ and cold starts. Do not extrapolate the small Windows live check into Cloud cost
 ## Pricing decision inputs
 
 Need measured cost distributions, support overhead, Store/platform fees, expected volume,
-memory choice and acceptable margin. Single-row source pagination may become a cost driver;
-measure it before increasing batch sizes and memory limits. Set a `page-audited` price only
+memory choice and acceptable margin. Source pagination uses batches of at most 50 rows;
+measure API overhead and peak batch memory before increasing that size. Set a `page-audited` price only
 after reviewing these data. No price or performance improvement is inferred here.

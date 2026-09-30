@@ -20,8 +20,8 @@ Corrections made during review:
   collapse into empty fingerprints and false near-duplicate matches.
 - Centralize request/DNS/body limits and pin the four direct runtime dependencies.
 
-Known engineering risks: Cloud memory and billing remain unmeasured; one-row source
-pagination can add latency; resumption is deliberately unsupported; SDK publication/charge
+Known engineering risks: Cloud memory and billing remain unmeasured; source pagination now
+retains batches of at most 50 rows (see VALIDATION.md); resumption is deliberately unsupported; SDK publication/charge
 is not an atomic cross-service transaction. Near-duplicate candidate caps can reduce recall.
 Only robots allow/disallow rules are enforced; directive-based request pacing is not included.
 

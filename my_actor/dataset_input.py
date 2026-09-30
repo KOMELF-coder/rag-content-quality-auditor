@@ -3,7 +3,7 @@
 import re
 
 from .extraction import extract_html, extract_text
-from .limits import MAX_SOURCE_CHARS
+from .limits import DATASET_BATCH_SIZE, MAX_SOURCE_CHARS
 from .models import AuditError, Extracted, Page
 from .url_policy import normalize_url
 
@@ -59,11 +59,19 @@ def adapt_row(row: object, index: int, dataset_id: str) -> Extracted:
 
 
 async def source_rows(dataset_client, limit: int):
-    """Single-row pagination limits response memory; no source HTML is retained."""
-    for offset in range(limit):
+    """Yield original row indexes from one bounded batch at a time, without prefetch."""
+    offset = 0
+    while offset < limit:
+        requested_count = min(DATASET_BATCH_SIZE, limit - offset)
         batch = await dataset_client.list_items(
-            offset=offset, limit=1, fields=SOURCE_FIELDS, clean=False
+            offset=offset, limit=requested_count, fields=SOURCE_FIELDS, clean=False
         )
         if not batch.items:
             break
-        yield offset, batch.items[0]
+        count = min(len(batch.items), requested_count)
+        for index in range(count):
+            yield offset + index, batch.items[index]
+        offset += count
+        # Release this response before fetching another; short responses advance by
+        # their actual length so server-side caps cannot cause missing indexes.
+        del batch

@@ -36,9 +36,11 @@ changes can naturally change later runs. Timestamps/runtime are observations, no
 
 ## Dataset lifecycle
 
-The SDK checks access to a source dataset, then requests one row at a time with only relevant
-fields. This limits response memory but increases API requests; benchmark the tradeoff before
-larger-scale use. SDK source calls go to the fixed Apify service, never to URLs in source rows.
+The SDK checks access to a source dataset, then requests at most 50 rows with only relevant
+fields. Each request is capped by the remaining page limit. One response batch is retained
+at a time, without prefetch; original row indexes advance by the actual response length.
+An empty response ends iteration, including after a final partial batch. SDK source calls
+go to the fixed Apify service, never to URLs in source rows.
 
 Field precedence: `markdown`, `cleanText`, `text`, `content`, `html`. Prefer nonempty strings
 with at least 40 characters; fallback to shorter nonempty strings. URL precedence: `loadedUrl`,

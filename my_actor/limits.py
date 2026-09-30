@@ -1,6 +1,7 @@
 """Central hard limits; all sizes refer to bytes unless named otherwise."""
 
 MAX_PAGES = 1000
+DATASET_BATCH_SIZE = 50
 MAX_DEPTH = 10
 MAX_CONCURRENCY = 8
 MAX_REDIRECTS = 5
