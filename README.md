@@ -1,10 +1,10 @@
 # RAG Content Quality Auditor
 
-Know which pages belong in your RAG knowledge base before you ingest them.
+**Audit website or dataset content before it reaches your RAG, LLM, AI agent, embeddings, or vector-database pipeline.**
 
-Audit a website or an existing Apify dataset. Identify useful pages, duplicates, boilerplate-heavy content, poor structure and ingestion risks, and receive an explainable RAG readiness score for every analyzed page.
+RAG Content Quality Auditor scores every successfully analyzed document, identifies exact/near duplicates and low-value pages, estimates tokens, suggests chunking defaults, and tells you which documents are worth keeping for ingestion.
 
-**The quality gate between crawling and RAG ingestion.** Review what you collected before spending time and resources on chunking, embeddings and vector-database ingestion. The Actor provides deterministic signals to help prioritize content; it does not use an LLM or claim to measure retrieval accuracy.
+**Use it as the quality gate between crawling and RAG ingestion.** Review what you collected before spending time and money on chunking, embeddings, indexing, and vector storage. The Actor is deterministic, explainable, and does not call an external LLM. It measures content quality signals, not retrieval accuracy or business relevance.
 
 ## 1. What it does
 
@@ -199,13 +199,26 @@ The same JSON inputs work through the Actor API and through Apify's Actor toolin
 3. Filter `recommended_for_rag`, join by source ID/URL and pass the retained original content to its ingestion tool.
 4. Present uncertain or near-duplicate cases for review.
 
-## 16. Pricing — pending benchmark
+## 16. Pricing
 
-Intended pricing: **one `page-audited` event per successfully analyzed document**. No final price has been chosen. Check the Actor's current Pricing tab when it is published.
+Launch pricing is **$0.003 per successfully analyzed document** using the custom `page-audited` event — about **$3 per 1,000 successful page/document audits**. Failed, blocked, unsupported or unusable resources do not request this custom billing event.
 
-An analyzed duplicate, short page or JavaScript shell still represents analysis work and is eligible for this event. Invalid URLs, blocked requests, unsupported MIME types, network failures and unusable dataset rows are not. Diagnostics are stored separately from the dataset. The report distinguishes billable eligibility, requested events and actual platform event counts. Local/non-PPE runs do not charge customers.
+An analyzed duplicate, short page or JavaScript shell still represents analysis work and is eligible for the event because the content was fetched/parsed/scored and a result was produced. Diagnostics are stored separately from the dataset. The report distinguishes billable eligibility, requested events and actual platform event counts.
 
-Configure only the custom event for this commercial contract; adding platform synthetic pricing events can create additional charges. [BENCHMARK_PLAN.md](BENCHMARK_PLAN.md) describes the measurements needed before pricing.
+### Cloud benchmark evidence
+
+Single-run Apify Cloud checks on 2026-09-30 used 512 MB memory, concurrency 4 and public Python documentation. They validate scale/cost behavior for this build; they are **not a universal performance guarantee** because websites differ in latency, page size and content type.
+
+| Selected pages | Successful audits | Skipped | Runtime | Apify run cost |
+| ---: | ---: | ---: | ---: | ---: |
+| 10 | 10 | 0 | ~7 s UI / 2.5 s engine | displayed as $0.000 |
+| 50 | 43 | 7 | ~1 min UI / 46.6 s engine | $0.001 |
+| 100 | 92 | 8 | 1 min 56 s UI / 112.5 s engine | $0.003 |
+| 500 | 491 | 9 | 16 min 51 s UI / 1005.3 s engine | $0.031 |
+
+The 500-page run processed all 500 selected URLs with zero page-processing failures; nine resources were skipped because they were unsupported or exceeded configured safety limits. Start with a small audit on your own corpus before increasing the limit.
+
+Platform usage is intended to be included in PPE pricing when the Actor is published. Check the Actor's current Pricing tab for the live commercial configuration. [BENCHMARK_PLAN.md](BENCHMARK_PLAN.md) records the measurement methodology.
 
 ## 17. Limitations
 
