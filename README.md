@@ -50,7 +50,7 @@ This is an example, not a measured performance claim. [Full sample results](exam
 
 In Apify, choose **Website**, enter your website URL and set **Maximum pages**. Run the Actor, then open **Page analyses** and **Global audit report**.
 
-For a first run, the input form suggests eight pages from the public Python tutorial. [The supplied example input](.actor/INPUT.json) keeps discovery inside the tutorial. API calls that omit `max_pages` use 50. Start small and inspect results before expanding an audit.
+For a first run, the input form suggests eight pages from the public Python tutorial, link depth 1, and `include_patterns = ["https://docs.python.org/3/tutorial/*"]`, matching [the supplied example input](.actor/INPUT.json). Replace the pattern when auditing another section, or clear it to crawl the whole hostname within the configured limits. API calls that omit `max_pages` use 50 and omitted `include_patterns` remains unrestricted within the hostname. Start small and inspect results before expanding an audit.
 
 ## 5. Example website input
 
@@ -140,8 +140,8 @@ Levels: **excellent ≥85**, **good ≥70**, **mixed ≥50**, **poor <50**.
 | `start_url` | Python tutorial | Public HTTP(S); required in website mode; no credentials, ports 80/443 only |
 | `dataset_id` | empty | Required in dataset mode; ID or owner~dataset name |
 | `max_pages` | 50 | 1–1,000 page attempts or source rows, including failures; form suggests 8 |
-| `max_depth` | 3 | 0–10; start=0, sitemap pages=1; 0 disables sitemap discovery |
-| `include_patterns` | `[]` | Full normalized URL globs; any match includes; empty includes all eligible URLs |
+| `max_depth` | 3 | 0–10; form suggests 1; start=0, sitemap pages=1; 0 disables sitemap discovery |
+| `include_patterns` | `[]` | Full normalized URL globs; form suggests `https://docs.python.org/3/tutorial/*`; empty includes all eligible same-host URLs |
 | `exclude_patterns` | `[]` | Exclusions win, including on page redirects |
 | `respect_robots_txt` | true | Crawl-rule checks for website requests |
 | `detect_duplicates` | true | Main-content comparisons within this run |
